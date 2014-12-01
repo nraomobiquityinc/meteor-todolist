@@ -94,10 +94,16 @@ Meteor.methods({
     },
 
     deleteTask: function(task){
+        if(task.isPrivate && task.owner !== Meteor.userId())
+            throw new Meteor.Error("not-authorized");
+
         TasksCollection.remove(task._id);
     },
 
     toggleTaskCompletion: function(task){
+        if(task.isPrivate && task.owner !== Meteor.userId())
+            throw new Meteor.Error("not-authorized");
+
         TasksCollection.update(task._id, {$set: {checked: !task.checked}});
     },
 
