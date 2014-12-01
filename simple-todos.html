@@ -5,11 +5,19 @@
 <body>
     <div class="container">
         <header>
-            <h1>Todo List</h1>
+            <h1>Todo List ({{incompleteCount}})</h1>
 
+            <label class="hideCompleted">
+                <input type="checkbox" checked="{{hideCompleted}}"/>
+                 Hide Completed Tasks
+                 {{> loginButtons}}
+            </label>
+
+            {{#if currentUser}}
             <form class="newTask">
                 <input type="text" name="text" placeholder="Add a new task"/>
             </form>
+            {{/if}}
         </header>
 
         <ul>
@@ -21,11 +29,21 @@
 </body>
 
 <template name="task">
-    <li class="{{#if checked}}checked{{/if}}">
+    <li class="{{#if checked}}checked{{/if}} {{#if isPrivate}}private{{/if}}">
         <button class="delete">&times;</button>
 
-        <input type="checkbox" checked="{{checked}}" class="toggle-checked"/>
+        <input type="checkbox" checked="{{checked}}" class="toggleChecked"/>
 
-        <span class="text">{{text}}</span>
+        {{#if isTaskOwner}}
+            <button class="togglePrivacy">
+                {{#if isPrivate}}
+                    Private
+                {{else}}
+                    Public
+                {{/if}}
+            </button>
+        {{/if}}
+
+        <span class="text"><strong>{{username}}</strong> - {{text}}</span>
     </li>
 </template>
